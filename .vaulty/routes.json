@@ -1,0 +1,35 @@
+{
+    "routes":[
+      {
+        "name":"in",
+        "method":"POST",
+        "url":"/in",
+        "upstream":"http://api:3000",
+        "request_transformations":[
+          {
+            "type":"json",
+            "expression":"card.number",
+            "action":{
+              "type":"tokenize"
+            }
+          }
+        ]
+      },
+      {
+        "name":"out",
+        "method":"POST",
+        "url":"/out",
+        "upstream":"http://api:3000",
+        "response_transformations":[
+          {
+            "type":"json",
+            "expression":"requestBody.card.number",
+            "action":{
+              "type":"detokenize"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  

@@ -1,0 +1,56 @@
+services:
+
+  redis:
+    image: redis:latest
+    expose:
+      - 6379:6379
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - .cache:/data
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=admin
+      - HTTP_PASSWORD=123
+    ports:
+      - 8081:8081
+    depends_on:
+      - redis
+  
+  vaulty:
+    image: vaulty/vaulty
+    environment:
+      - VAULTY_ENCRYPTION_TYPE=aesgcm
+      - VAULTY_ENCRYPTION_KEY=002b2059da7c53cb8b540a5094185685
+      - VAULTY_STORAGE_TYPE=redis
+      - REDIS_URL=redis://@redis:6379
+    ports:
+      - 8080:8080
+    volumes:
+      - .vaulty:/.vaulty
+    depends_on:
+      - redis
+      - api
+
+  api: 
+    image: node:latest
+    expose:
+      - 3000
+    working_dir: /api
+    command: ["npm", "start"]
+    volumes:
+      - ./api:/api
+
+
+volumes:
+  .cache:
+    driver: local
+  .vaulty:
+    driver: local
+  api:
+    driver: local
+
+
+
