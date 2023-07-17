@@ -1,6 +1,21 @@
 {
     "routes":[
       {
+        "name":"in-hash",
+        "method":"POST",
+        "url":"/in-hash",
+        "upstream":"http://api:3000",
+        "request_transformations":[
+          {
+            "type":"json",
+            "expression":"card.number",
+            "action":{
+              "type":"hash"
+            }
+          }
+        ]
+      },
+      {
         "name":"in",
         "method":"POST",
         "url":"/in",
@@ -10,7 +25,7 @@
             "type":"json",
             "expression":"card.number",
             "action":{
-              "type":"tokenize"
+              "type":"tokenize_and_hash"
             }
           }
         ]

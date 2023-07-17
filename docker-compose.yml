@@ -20,7 +20,7 @@ services:
       - redis
   
   vaulty:
-    image: vaulty/vaulty
+    image: ciceros/vaulty:latest
     environment:
       - VAULTY_ENCRYPTION_TYPE=aesgcm
       - VAULTY_ENCRYPTION_KEY=002b2059da7c53cb8b540a5094185685
